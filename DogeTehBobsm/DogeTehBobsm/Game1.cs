@@ -33,8 +33,7 @@ namespace DogeTehBobsm
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            Components.Add(new Level(this));
             base.Initialize();
         }
 
@@ -70,7 +69,20 @@ namespace DogeTehBobsm
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            //Ueberpruefe Kollision von jedem Collider mit jedem anderem Collider
+            for (int i = 0; i < Components.Count; i++)
+            {
+                for (int j = i; j < Components.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        if (Components[i].GetType().IsSubclassOf(typeof(Collider)) && Components[j].GetType().IsSubclassOf(typeof(Collider)))
+                        {
+                            CollisionSystem.Update(gameTime, (Collider)Components[i], (Collider)Components[j]);
+                        }
+                    }
+                }
+            }
 
             base.Update(gameTime);
         }
