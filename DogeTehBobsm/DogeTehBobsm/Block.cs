@@ -56,7 +56,7 @@ namespace DogeTehBobsm
                                 3, 7, 4,    3, 4, 0,
                                 4, 5, 6,    4, 6, 7,
                                 5, 4, 0,    5, 0, 1
-                            };
+                            }; //Noch nicht komplett richtige Indizierung
             iBuffer_=new IndexBuffer(Game.GraphicsDevice, IndexElementSize.SixteenBits, indexList.Length, BufferUsage.WriteOnly);
             iBuffer_.SetData(indexList);
 
@@ -75,7 +75,7 @@ namespace DogeTehBobsm
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime) //Kamera/Viewdaten muessen mitgegeben werden
         {
             effect_.View = Matrix.CreateLookAt(new Vector3(0, 20, 0), new Vector3(10, 10, 10), new Vector3(0, 1, 0));
             effect_.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), Game.GraphicsDevice.DisplayMode.AspectRatio, 0.5f, 1000.0f);
@@ -83,13 +83,9 @@ namespace DogeTehBobsm
             foreach (EffectPass pass in effect_.CurrentTechnique.Passes)
             {
                 pass.Apply();
-
-                //
                 Game.GraphicsDevice.SetVertexBuffer(vBuffer_);
                 Game.GraphicsDevice.Indices = iBuffer_;
                 Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vBuffer_.VertexCount, 0, iBuffer_.IndexCount / 3);
-
-
             }
             base.Draw(gameTime);
         }
