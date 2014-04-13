@@ -15,9 +15,9 @@ namespace DogeTehBobsm
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class Collider : Microsoft.Xna.Framework.GameComponent
+    public class Collider : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        public BoundingBox bounds_;
+        protected BoundingBox bounds_;
 
         public Collider(Game game, BoundingBox bounds)
             : base(game)
@@ -45,6 +45,11 @@ namespace DogeTehBobsm
             // TODO: Add your update code here
 
             base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
 
         public virtual void OnCollision(Collider collider)

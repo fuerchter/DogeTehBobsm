@@ -12,15 +12,8 @@ using Microsoft.Xna.Framework.Media;
 
 namespace DogeTehBobsm
 {
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
     public class CollisionSystem
     {
-        /// <summary>
-        /// Allows the game component to update itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public static void Update(GameTime gameTime, Collider collider1, Collider collider2)
         {
             collider1.OnCollision(collider2);
