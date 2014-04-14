@@ -19,6 +19,10 @@ namespace DogeTehBobsm
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        BasicEffect defaultEffect;
+
+        Player player;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -34,6 +38,9 @@ namespace DogeTehBobsm
         protected override void Initialize()
         {
             Components.Add(new Level(this));
+            player = new Player(this);
+            Components.Add(player);
+            defaultEffect = new BasicEffect(GraphicsDevice);
             base.Initialize();
         }
 
@@ -69,6 +76,7 @@ namespace DogeTehBobsm
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+
             //Ueberpruefe Kollision von jedem Collider mit jedem anderem Collider
             for (int i = 0; i < Components.Count; i++)
             {
@@ -81,6 +89,13 @@ namespace DogeTehBobsm
                             CollisionSystem.Update(gameTime, (Collider)Components[i], (Collider)Components[j]);
                         }
                     }
+                }
+
+                if (Components[i].GetType().IsSubclassOf(typeof(Collider)))
+                {
+                    Collider currentCollider = (Collider)Components[i];
+                    currentCollider.SetEffect(defaultEffect);
+                    currentCollider.SetCamera(player.GetView(), player.GetProjection());
                 }
             }
 

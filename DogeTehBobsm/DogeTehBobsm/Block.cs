@@ -17,10 +17,9 @@ namespace DogeTehBobsm
     /// </summary>
     public class Block : Collider
     {
-        bool exists_;
+        bool exists;
         VertexBuffer vBuffer_;
         IndexBuffer iBuffer_;
-        BasicEffect effect_;
 
         public Block(Game game, BoundingBox bounds)
             : base(game, bounds)
@@ -33,15 +32,14 @@ namespace DogeTehBobsm
         /// </summary>
         public override void Initialize()
         {
-            exists_ = true;
+            exists = true;
 
             //Erstelle VertexList aus BoundingBox
             List<VertexPositionColor> vertexList = new List<VertexPositionColor>();
-            Vector3[] boundCorners = bounds_.GetCorners();
-            Console.WriteLine(boundCorners.Length);
+            Vector3[] boundCorners = bounds.GetCorners();
             for (int i = 0; i < boundCorners.Length; i++)
             {
-                Console.WriteLine(boundCorners[i].ToString());
+                //Console.WriteLine(boundCorners[i].ToString());
                 vertexList.Add(new VertexPositionColor(boundCorners[i], new Color(255, 255, 255)));
             }
 
@@ -60,8 +58,6 @@ namespace DogeTehBobsm
             iBuffer_=new IndexBuffer(Game.GraphicsDevice, IndexElementSize.SixteenBits, indexList.Length, BufferUsage.WriteOnly);
             iBuffer_.SetData(indexList);
 
-            effect_ = new BasicEffect(Game.GraphicsDevice);
-
             base.Initialize();
         }
 
@@ -77,8 +73,8 @@ namespace DogeTehBobsm
 
         public override void Draw(GameTime gameTime) //Kamera/Viewdaten muessen mitgegeben werden
         {
-            effect_.View = Matrix.CreateLookAt(new Vector3(0, 20, 0), new Vector3(10, 10, 10), new Vector3(0, 1, 0));
-            effect_.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), Game.GraphicsDevice.DisplayMode.AspectRatio, 0.5f, 1000.0f);
+            effect_.View = view;
+            effect_.Projection = projection;
             effect_.VertexColorEnabled = true;
             foreach (EffectPass pass in effect_.CurrentTechnique.Passes)
             {

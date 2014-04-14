@@ -17,12 +17,17 @@ namespace DogeTehBobsm
     /// </summary>
     public class Collider : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        protected BoundingBox bounds_;
+        protected BoundingBox bounds;
+        protected BasicEffect effect_;
+
+        //Ueberfluessig, schon in BasicEffect enthalten?
+        protected Matrix view;
+        protected Matrix projection;
 
         public Collider(Game game, BoundingBox bounds)
             : base(game)
         {
-            bounds_ = bounds;
+            this.bounds = bounds;
         }
 
         /// <summary>
@@ -55,6 +60,17 @@ namespace DogeTehBobsm
         public virtual void OnCollision(Collider collider)
         {
 
+        }
+
+        public void SetEffect(BasicEffect effect)
+        {
+            effect_ = effect;
+        }
+
+        public void SetCamera(Matrix view, Matrix projection)
+        {
+            this.view = view;
+            this.projection = projection;
         }
     }
 }

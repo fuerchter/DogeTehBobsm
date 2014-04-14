@@ -17,8 +17,8 @@ namespace DogeTehBobsm
     /// </summary>
     public class Level : Microsoft.Xna.Framework.GameComponent
     {
-        float winTimer_; //TimeSpan verwenden?
-        float bombTimer_;
+        float winTimer; //TimeSpan verwenden?
+        float bombTimer;
         Block[,] blocks_;
 
         public Level(Game game)
