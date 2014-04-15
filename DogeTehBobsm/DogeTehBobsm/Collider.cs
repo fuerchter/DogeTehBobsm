@@ -58,6 +58,11 @@ namespace DogeTehBobsm
 
         }
 
+        public BoundingBox GetBounds()
+        {
+            return bounds;
+        }
+
         public void SetEffect(BasicEffect effect)
         {
             this.effect = effect;

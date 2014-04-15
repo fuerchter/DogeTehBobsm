@@ -15,7 +15,7 @@ namespace DogeTehBobsm
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class Player : Microsoft.Xna.Framework.GameComponent
+    public class Player : Collider
     {
         //View Informationen
         Vector3 position;
@@ -25,10 +25,13 @@ namespace DogeTehBobsm
         Matrix view;
         Matrix projection;
 
+        Vector3 boundScale;
+        Vector3 oldMovement;
+
         float speed;
 
         public Player(Game game)
-            : base(game)
+            : base(game, new BoundingBox())
         {
             // TODO: Construct any child components here
         }
@@ -39,12 +42,14 @@ namespace DogeTehBobsm
         /// </summary>
         public override void Initialize()
         {
-            position = new Vector3(0, 5, 0);
-            target = new Vector3(10, 5, 10);
+            position = new Vector3(0, 14, 0);
+            target = new Vector3(10, 14, 0);
             upVector = Vector3.Up;
 
             view = Matrix.CreateLookAt(position,target, upVector);
             projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60.0f), Game.GraphicsDevice.Viewport.AspectRatio, 0.5f, 1000.0f);
+
+            boundScale = new Vector3(5, 5, 5);
 
             speed = 2;
 
@@ -80,7 +85,7 @@ namespace DogeTehBobsm
                 movement -= right;
             }
 
-            //movement.Y = 0;
+            movement.Y = 0;
             if (movement.Length() > 1)
             {
                 movement.Normalize();
@@ -90,6 +95,7 @@ namespace DogeTehBobsm
             {
                 movement *= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 position += movement;
+                oldMovement = movement;
             }
 
             //Rotation
@@ -108,7 +114,18 @@ namespace DogeTehBobsm
 
             view = Matrix.CreateLookAt(position, target, upVector);
 
+            bounds.Min = position - boundScale / 2.0f;
+            bounds.Max = position + boundScale / 2.0f;
+
+            //Console.WriteLine(bounds);
+
             base.Update(gameTime);
+        }
+
+        public override void OnCollision(Collider collider)
+        {
+            position -= oldMovement;
+            target -= oldMovement;
         }
 
         public Matrix GetView()

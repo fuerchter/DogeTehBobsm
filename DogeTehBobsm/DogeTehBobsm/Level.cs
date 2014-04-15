@@ -32,6 +32,7 @@ namespace DogeTehBobsm
             {
                 for (int x = 0; x <= blocks.GetUpperBound(1); x++)
                 {
+                    blockScale.Y += 1;
                     blocks[z, x] = new Block(game, new BoundingBox(new Vector3(x*blockScale.X, 0, z*blockScale.Z),
                                                                     new Vector3(x*blockScale.X+blockScale.X, blockScale.Y, z*blockScale.Z+blockScale.Z)));
                     game.Components.Add(blocks[z, x]);
