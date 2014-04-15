@@ -19,7 +19,7 @@ namespace DogeTehBobsm
     {
         float winTimer; //TimeSpan verwenden?
         float bombTimer;
-        Block[,] blocks_;
+        Block[,] blocks;
 
         public Level(Game game)
             : base(game)
@@ -27,14 +27,14 @@ namespace DogeTehBobsm
             Vector3 blockScale = new Vector3(10, 10, 10);
 
             //Erstelle ein 5x5 Level mit Bloecken der Groesse 10x10x10
-            blocks_ = new Block[5, 5];
-            for (int z = 0; z <= blocks_.GetUpperBound(0); z++)
+            blocks = new Block[5, 5];
+            for (int z = 0; z <= blocks.GetUpperBound(0); z++)
             {
-                for (int x = 0; x <= blocks_.GetUpperBound(1); x++)
+                for (int x = 0; x <= blocks.GetUpperBound(1); x++)
                 {
-                    blocks_[z, x] = new Block(game, new BoundingBox(new Vector3(x*blockScale.X, 0, z*blockScale.Z),
+                    blocks[z, x] = new Block(game, new BoundingBox(new Vector3(x*blockScale.X, 0, z*blockScale.Z),
                                                                     new Vector3(x*blockScale.X+blockScale.X, blockScale.Y, z*blockScale.Z+blockScale.Z)));
-                    game.Components.Add(blocks_[z, x]);
+                    game.Components.Add(blocks[z, x]);
                 }
             }
         }

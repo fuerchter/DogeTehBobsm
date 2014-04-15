@@ -18,8 +18,8 @@ namespace DogeTehBobsm
     public class Block : Collider
     {
         bool exists;
-        VertexBuffer vBuffer_;
-        IndexBuffer iBuffer_;
+        VertexBuffer vBuffer;
+        IndexBuffer iBuffer;
 
         public Block(Game game, BoundingBox bounds)
             : base(game, bounds)
@@ -44,19 +44,19 @@ namespace DogeTehBobsm
             }
 
             //Erstelle VertexBuffer aus VertexList
-            vBuffer_ = new VertexBuffer(Game.GraphicsDevice, VertexPositionColor.VertexDeclaration, vertexList.Count, BufferUsage.WriteOnly);
-            vBuffer_.SetData<VertexPositionColor>(vertexList.ToArray());
+            vBuffer = new VertexBuffer(Game.GraphicsDevice, VertexPositionColor.VertexDeclaration, vertexList.Count, BufferUsage.WriteOnly);
+            vBuffer.SetData<VertexPositionColor>(vertexList.ToArray());
 
             short[] indexList={
                                 0, 1, 2,    0, 2, 3,
                                 1, 5, 6,    1, 6, 2,
                                 2, 6, 7,    2, 7, 3,
                                 3, 7, 4,    3, 4, 0,
-                                4, 5, 6,    4, 6, 7,
-                                5, 4, 0,    5, 0, 1
+                                4, 6, 5,    4, 7, 6,
+                                5, 0, 4,    5, 1, 0
                             }; //Noch nicht komplett richtige Indizierung
-            iBuffer_=new IndexBuffer(Game.GraphicsDevice, IndexElementSize.SixteenBits, indexList.Length, BufferUsage.WriteOnly);
-            iBuffer_.SetData(indexList);
+            iBuffer=new IndexBuffer(Game.GraphicsDevice, IndexElementSize.SixteenBits, indexList.Length, BufferUsage.WriteOnly);
+            iBuffer.SetData(indexList);
 
             base.Initialize();
         }
@@ -73,15 +73,13 @@ namespace DogeTehBobsm
 
         public override void Draw(GameTime gameTime) //Kamera/Viewdaten muessen mitgegeben werden
         {
-            effect_.View = view;
-            effect_.Projection = projection;
-            effect_.VertexColorEnabled = true;
-            foreach (EffectPass pass in effect_.CurrentTechnique.Passes)
+            effect.VertexColorEnabled = true;
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                Game.GraphicsDevice.SetVertexBuffer(vBuffer_);
-                Game.GraphicsDevice.Indices = iBuffer_;
-                Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vBuffer_.VertexCount, 0, iBuffer_.IndexCount / 3);
+                Game.GraphicsDevice.SetVertexBuffer(vBuffer);
+                Game.GraphicsDevice.Indices = iBuffer;
+                Game.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vBuffer.VertexCount, 0, iBuffer.IndexCount / 3);
             }
             base.Draw(gameTime);
         }

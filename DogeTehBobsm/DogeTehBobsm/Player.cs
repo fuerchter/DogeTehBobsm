@@ -80,7 +80,7 @@ namespace DogeTehBobsm
                 movement -= right;
             }
 
-            movement.Y = 0;
+            //movement.Y = 0;
             if (movement.Length() > 1)
             {
                 movement.Normalize();
