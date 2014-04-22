@@ -15,15 +15,14 @@ namespace DogeTehBobsm
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class Collider : Microsoft.Xna.Framework.DrawableGameComponent
+    public class FootCollider : Collider
     {
-        protected BoundingBox bounds;
-        protected BasicEffect effect;
+        bool collision;
 
-        public Collider(Game game, BoundingBox bounds)
-            : base(game)
+        public FootCollider(Game game, BoundingBox bounds)
+            : base(game, bounds)
         {
-            this.bounds = bounds;
+            // TODO: Construct any child components here
         }
 
         /// <summary>
@@ -32,8 +31,7 @@ namespace DogeTehBobsm
         /// </summary>
         public override void Initialize()
         {
-            // TODO: Add your initialization code here
-
+            collision = false;
             base.Initialize();
         }
 
@@ -43,40 +41,23 @@ namespace DogeTehBobsm
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
-
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void OnCollision(Collider collider)
         {
-            base.Draw(gameTime);
+            if (collider.GetType() == typeof(Block))
+            {
+                //Console.WriteLine("DOOOOOOOOOOOOOOOR");
+                collision = true;
+            }
         }
 
-        public virtual void OnCollision(Collider collider)
+        public bool DidCollide()
         {
-
-        }
-
-        public BoundingBox GetBounds()
-        {
-            return bounds;
-        }
-
-        public void SetBounds(BoundingBox bounds)
-        {
-            this.bounds=bounds;
-        }
-
-        public void SetEffect(BasicEffect effect)
-        {
-            this.effect = effect;
-        }
-
-        public void SetCamera(Matrix view, Matrix projection)
-        {
-            effect.View = view;
-            effect.Projection = projection;
+            bool res = collision;
+            collision = false;
+            return res;
         }
     }
 }

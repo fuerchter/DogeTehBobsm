@@ -30,10 +30,13 @@ namespace DogeTehBobsm
 
         float speed;
 
+        FootCollider foot;
+
         public Player(Game game)
             : base(game, new BoundingBox())
         {
-            // TODO: Construct any child components here
+            foot = new FootCollider(game, new BoundingBox());
+            game.Components.Add(foot);
         }
 
         /// <summary>
@@ -91,6 +94,12 @@ namespace DogeTehBobsm
                 movement.Normalize();
             }
 
+            movement.Y = -2; //NUMBARS, Sprung fehlt!
+            if (foot.DidCollide())
+            {
+                movement.Y = 0;
+            }
+
             if (movement.Length() != 0)
             {
                 movement *= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -116,16 +125,22 @@ namespace DogeTehBobsm
 
             bounds.Min = position - boundScale / 2.0f;
             bounds.Max = position + boundScale / 2.0f;
+            Vector3 newY=new Vector3(0, -boundScale.Y/*/2.0f*/, 0);
+            foot.SetBounds(new BoundingBox(bounds.Min + newY, bounds.Max + newY));
 
             //Console.WriteLine(bounds);
+            //Console.WriteLine(foot.GetBounds());
 
             base.Update(gameTime);
         }
 
         public override void OnCollision(Collider collider)
         {
-            position -= oldMovement;
-            target -= oldMovement;
+            if (collider.GetType() == typeof(Block))
+            {
+                position -= oldMovement;
+                target -= oldMovement;
+            }
         }
 
         public Matrix GetView()

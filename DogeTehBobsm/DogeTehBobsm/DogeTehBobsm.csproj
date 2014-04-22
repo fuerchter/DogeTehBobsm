@@ -110,6 +110,7 @@
     <Compile Include="Block.cs" />
     <Compile Include="Collider.cs" />
     <Compile Include="CollisionSystem.cs" />
+    <Compile Include="FootCollider.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
