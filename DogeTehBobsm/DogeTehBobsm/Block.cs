@@ -35,19 +35,11 @@ namespace DogeTehBobsm
             exists = true;
 
             //Erstelle VertexList aus BoundingBox
-            List<VertexPositionColor> vertexList = new List<VertexPositionColor>();
+            List<VertexPositionNormalTexture> vertexList = new List<VertexPositionNormalTexture>();
             Vector3[] boundCorners = bounds.GetCorners();
-            for (int i = 0; i < boundCorners.Length; i++)
-            {
-                //Console.WriteLine(boundCorners[i].ToString());
-                vertexList.Add(new VertexPositionColor(boundCorners[i], new Color(255, 255, 255)));
-            }
+            Vector3[] normals = new Vector3[boundCorners.Length];
 
-            //Erstelle VertexBuffer aus VertexList
-            vBuffer = new VertexBuffer(Game.GraphicsDevice, VertexPositionColor.VertexDeclaration, vertexList.Count, BufferUsage.WriteOnly);
-            vBuffer.SetData<VertexPositionColor>(vertexList.ToArray());
-
-            short[] indexList={
+            short[] indexList ={
                                 0, 1, 2,    0, 2, 3,
                                 1, 5, 6,    1, 6, 2,
                                 2, 6, 7,    2, 7, 3,
@@ -55,8 +47,33 @@ namespace DogeTehBobsm
                                 4, 6, 5,    4, 7, 6,
                                 5, 0, 4,    5, 1, 0
                             }; //Noch nicht komplett richtige Indizierung
-            iBuffer=new IndexBuffer(Game.GraphicsDevice, IndexElementSize.SixteenBits, indexList.Length, BufferUsage.WriteOnly);
+            iBuffer = new IndexBuffer(Game.GraphicsDevice, IndexElementSize.SixteenBits, indexList.Length, BufferUsage.WriteOnly);
             iBuffer.SetData(indexList);
+
+            //Normale aus Positionen und Indices generieren?
+            for (int i = 0; i < indexList.Length / 3; i++)
+            {
+                Vector3 indices=new Vector3(indexList[i * 3], indexList[i * 3 + 1], indexList[i * 3 + 2]);
+
+                Vector3 first = boundCorners[(int)indices.X];
+                Vector3 second = boundCorners[(int)indices.Y];
+                Vector3 third = boundCorners[(int)indices.Z];
+
+                Vector3 normal = Vector3.Cross(second - first, third - first);
+                normals[(int)indices.X] = normal;
+                normals[(int)indices.Y] = normal;
+                normals[(int)indices.Z] = normal;
+            }
+
+            for (int i = 0; i < boundCorners.Length; i++)
+            {
+                //Console.WriteLine(boundCorners[i].ToString());
+                vertexList.Add(new VertexPositionNormalTexture(boundCorners[i], normals[i], Vector2.Zero));
+            }
+
+            //Erstelle VertexBuffer aus VertexList
+            vBuffer = new VertexBuffer(Game.GraphicsDevice, VertexPositionNormalTexture.VertexDeclaration, vertexList.Count, BufferUsage.WriteOnly);
+            vBuffer.SetData<VertexPositionNormalTexture>(vertexList.ToArray());
 
             base.Initialize();
         }
@@ -73,7 +90,6 @@ namespace DogeTehBobsm
 
         public override void Draw(GameTime gameTime) //Kamera/Viewdaten muessen mitgegeben werden
         {
-            effect.VertexColorEnabled = true;
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();

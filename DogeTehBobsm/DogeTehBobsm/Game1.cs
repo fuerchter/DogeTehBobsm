@@ -41,6 +41,7 @@ namespace DogeTehBobsm
             player = new Player(this);
             Components.Add(player);
             defaultEffect = new BasicEffect(GraphicsDevice);
+            defaultEffect.EnableDefaultLighting();
             base.Initialize();
         }
 
