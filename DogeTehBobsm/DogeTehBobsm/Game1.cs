@@ -54,7 +54,7 @@ namespace DogeTehBobsm
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-               font = Content.Load < SpriteFont > ("HUDFont"); 
+               //font = Content.Load < SpriteFont > ("HUDFont"); 
              //  bombsm = Content.Load<Model>("bla"); 
             // TODO: use this.Content to load your game content here
         }
@@ -114,7 +114,7 @@ namespace DogeTehBobsm
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(Game1.font, "Health" + health, Vector2.Zero, Color.Firebrick);
+            //spriteBatch.DrawString(Game1.font, "Health" + health, Vector2.Zero, Color.Firebrick);
             spriteBatch.End();
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
