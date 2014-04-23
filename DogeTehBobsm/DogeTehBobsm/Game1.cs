@@ -22,7 +22,8 @@ namespace DogeTehBobsm
         BasicEffect defaultEffect;
 
         Player player;
-
+        float health = 20;
+        public static SpriteFont font;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -53,7 +54,8 @@ namespace DogeTehBobsm
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+               font = Content.Load < SpriteFont > ("HUDFont"); 
+             //  bombsm = Content.Load<Model>("bla"); 
             // TODO: use this.Content to load your game content here
         }
 
@@ -110,7 +112,13 @@ namespace DogeTehBobsm
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(Game1.font, "Health" + health, Vector2.Zero, Color.Firebrick);
+            spriteBatch.End();
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
