@@ -28,6 +28,7 @@ namespace DogeTehBobsm
         Vector3 boundScale;
         Vector3 oldMovement;
 
+        float health = 20;
         float speed;
 
         FootCollider foot;
@@ -78,6 +79,10 @@ namespace DogeTehBobsm
 
             //Bewegung
             KeyboardState keyboard = Keyboard.GetState();
+            if (keyboard.IsKeyDown(Keys.Escape))
+            {
+                Game.Exit();
+            }
             if (keyboard.IsKeyDown(Keys.W))
             {
                 movement += forward;
@@ -154,6 +159,11 @@ namespace DogeTehBobsm
 
             base.Update(gameTime);
         }
+
+
+       
+     
+        
 
         public override void OnCollision(Collider collider)
         {
