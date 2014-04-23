@@ -31,6 +31,9 @@ namespace DogeTehBobsm
         float speed;
 
         FootCollider foot;
+        bool jumping;
+        float jumpTime;
+        float maxJumpTime;
 
         public Player(Game game)
             : base(game, new BoundingBox())
@@ -54,7 +57,11 @@ namespace DogeTehBobsm
 
             boundScale = new Vector3(5, 5, 5);
 
-            speed = 2;
+            speed = 3;
+
+            jumping = false;
+            jumpTime = 0;
+            maxJumpTime = 1;
 
             base.Initialize();
         }
@@ -98,6 +105,23 @@ namespace DogeTehBobsm
             if (foot.DidCollide())
             {
                 movement.Y = 0;
+                jumping = false;
+                if (keyboard.IsKeyDown(Keys.Space))
+                {
+                    jumping = true;
+                }
+            }
+
+            if (jumping)
+            {
+                jumpTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //Console.WriteLine(jumpTime);
+                movement.Y = 2;
+            }
+            if (jumpTime > maxJumpTime)
+            {
+                jumping = false;
+                jumpTime = 0;
             }
 
             if (movement.Length() != 0)
@@ -125,11 +149,8 @@ namespace DogeTehBobsm
 
             bounds.Min = position - boundScale / 2.0f;
             bounds.Max = position + boundScale / 2.0f;
-            Vector3 newY=new Vector3(0, -boundScale.Y/*/2.0f*/, 0);
-            foot.SetBounds(new BoundingBox(bounds.Min + newY, bounds.Max + newY));
 
-            //Console.WriteLine(bounds);
-            //Console.WriteLine(foot.GetBounds());
+            foot.SetBounds(new BoundingBox(bounds.Min, bounds.Max - new Vector3(0, boundScale.Y/2, 0)));
 
             base.Update(gameTime);
         }
