@@ -23,6 +23,7 @@ namespace DogeTehBobsm
 
         Player player;
         float health = 20;
+        float time = 5;
         public static SpriteFont font;
         public Game1()
         {
@@ -102,6 +103,11 @@ namespace DogeTehBobsm
                 }
             }
 
+            if (time > 0.0f)
+            {
+                time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
             base.Update(gameTime);
         }
 
@@ -114,12 +120,17 @@ namespace DogeTehBobsm
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(Game1.font, "Health" + health, Vector2.Zero, Color.Firebrick);
+            spriteBatch.DrawString(Game1.font, "Health: " + health, Vector2.Zero, Color.Firebrick);
+            spriteBatch.DrawString(Game1.font, "Time left: " + (int)time, new Vector2(200, 0), Color.Firebrick);
+            if (time <= 0.0f)
+            {
+                spriteBatch.DrawString(Game1.font, "WIN GET", new Vector2(0, 200), Color.Firebrick);
+            }
             spriteBatch.End();
+
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
