@@ -21,8 +21,14 @@ namespace DogeTehBobsm
 
         BasicEffect defaultEffect;
 
+        float aspectRatio;
+        Matrix viewMatrix;
+        Matrix projectionMatrix;
+
+
         Player player;
         float health = 20;
+        private Model Bomb;
         float time = 5;
         public static SpriteFont font;
         public Game1()
@@ -55,8 +61,9 @@ namespace DogeTehBobsm
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-               font = Content.Load < SpriteFont > ("HUDFont"); 
-              // bombsm = Content.Load<Model>("bla"); 
+            font = Content.Load<SpriteFont>("HUDFont");
+            Bomb = Content.Load<Model>("bomb");
+            aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
             // TODO: use this.Content to load your game content here
         }
 
@@ -76,6 +83,11 @@ namespace DogeTehBobsm
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            //if (Bomb.Intersects(player.))
+            //{
+
+            //    health -= 2;
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -108,6 +120,10 @@ namespace DogeTehBobsm
                 time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
+            viewMatrix = player.GetView();
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60.0f), 800.0f / 600.0f, 0.5f, 1000.0f);
+
+
             base.Update(gameTime);
         }
 
@@ -119,20 +135,35 @@ namespace DogeTehBobsm
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
-            spriteBatch.DrawString(Game1.font, "Health: " + health, Vector2.Zero, Color.Firebrick);
-            spriteBatch.DrawString(Game1.font, "Time left: " + (int)time, new Vector2(200, 0), Color.Firebrick);
-            if (time <= 0.0f)
+            Matrix[] transforms = new Matrix[Bomb.Bones.Count];
+            Bomb.CopyAbsoluteBoneTransformsTo(transforms);
+            // Draw- model
+            foreach (ModelMesh mesh in Bomb.Meshes)
             {
-                spriteBatch.DrawString(Game1.font, "WIN GET", new Vector2(0, 200), Color.Firebrick);
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.EnableDefaultLighting();  // Beleuchtung aktivieren
+                    effect.World = Matrix.CreateScale(0.05f) * Matrix.CreateTranslation(2, 17, 10);
+                    effect.View = viewMatrix;
+                    effect.Projection = projectionMatrix;
+                }
+                mesh.Draw();
+
+                spriteBatch.Begin();
+                spriteBatch.DrawString(Game1.font, "Health: " + health, Vector2.Zero, Color.Firebrick);
+                spriteBatch.DrawString(Game1.font, "Time left: " + (int)time, new Vector2(200, 0), Color.Firebrick);
+                if (time <= 0.0f)
+                {
+                    spriteBatch.DrawString(Game1.font, "WIN GET", new Vector2(0, 200), Color.Firebrick);
+                }
+                spriteBatch.End();
+
+                GraphicsDevice.BlendState = BlendState.Opaque;
+                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
+                base.Draw(gameTime);
             }
-            spriteBatch.End();
-
-            GraphicsDevice.BlendState = BlendState.Opaque;
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-
-            base.Draw(gameTime);
         }
     }
 }
